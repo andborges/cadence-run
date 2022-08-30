@@ -1,0 +1,41 @@
+{
+  "contracts": {
+    "DemoToken": {
+      "source": "./test/contracts/DemoToken.cdc",
+      "aliases": {
+        "emulator": "0xf8d6e0586b0a20c7"
+      }
+    },
+    "FungibleToken": {
+      "source": "./test/contracts/FungibleToken.cdc",
+      "aliases": {
+        "emulator": "0xee82856bf20e2aa6"
+      }
+    }
+  },
+  "networks": {
+    "emulator": "127.0.0.1:3569"
+  },
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": "f8e188e8af0b8b414be59c4a1a15cc666c898fb34d94156e9b51e18bfde754a5"
+    },
+    "Alice": {
+			"address": "01cf0e2f2f715450",
+			"key": "7ed9dc3aa1b71baf05f88873bcb63562dcac02e0520aa26dac93daeab13108a3"
+		}
+  },
+  "deployments": {
+    "emulator": {
+      "emulator-account": [
+        {
+          "name": "DemoToken", 
+          "args": [
+            { "type": "UFix64", "value": "5000.0" }
+          ]
+        }
+      ]
+    }
+  }
+}
