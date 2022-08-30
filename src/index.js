@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -7,7 +9,7 @@ const commander = require('commander');
 const program = new commander.Command();
 
 const execRead = function(options) {
-    const tempFile = prepareFile(options.network, './src/templates/Read.cdc', [options.contract, options.variable, options.return]);
+    const tempFile = prepareFile(options.network, path.join(__dirname, 'templates', 'Read.cdc'), [options.contract, options.property, options.return]);
     const command = `flow scripts execute ${tempFile} -l error`
 
     execCommand(command, () => {
@@ -102,8 +104,8 @@ program
 program
     .command('read')
     .option('-c, --contract <value>', 'Contract name')
-    .option('-v, --variable <value>', 'Variable to read')
-    .option('-r, --return <value>', 'Type to return')
+    .option('-p, --property <value>', 'Property to read')
+    .option('-r, --return <value>', 'Return type')
     .action((options, cmd) => {
         execRead(cmd.optsWithGlobals());
     });
