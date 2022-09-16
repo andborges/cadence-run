@@ -3,8 +3,7 @@
   "version": "1.0.2",
   "description": "A tool to simplify and extend flow-cli usage",
   "bin": "src/index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "André Borges Medeiros",
   "license": "ISC",
   "repository": {
@@ -13,6 +12,7 @@
   },
   "dependencies": {
     "commander": "^9.4.0",
+    "elliptic": "^6.5.4",
     "uuid": "^8.3.2"
   }
 }

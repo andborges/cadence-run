@@ -1,6 +1,7 @@
 const { exec } = require('child_process');
 const path = require('path');
-const { prepareFile, cleanUp } = require('./file');
+const EC = require('elliptic').ec;
+const { prepareFile, getFlowJson, saveFlowJson, cleanUp } = require('./file');
 
 const execRead = function (contract, property, type, options) {
     const tempFile = prepareFile(options.network, path.join(__dirname, 'Read.cdc'), [contract, property, type]);
@@ -35,6 +36,37 @@ const execTransaction = function (path, args, options) {
     });
 };
 
+const execAccountsCreate = function (options) {
+    var ec = new EC('p256');
+    var keyPair = ec.genKeyPair();
+    var privateKey = keyPair.getPrivate('hex');
+    var publicKey = keyPair.getPublic('hex').substring(2);
+
+    let command = `flow accounts create --key ${publicKey}`;
+
+    if (options.signer) {
+        command += ` --signer ${options.signer}`;
+    }
+
+    command += ' -l error';
+
+    execCommand(command, (stdout) => {
+        const matches = /^Address.*/gm.exec(stdout);
+        if (matches[0]) {
+            const address = matches[0].replace('Address', '').trim();
+
+            const flowJson = getFlowJson();
+
+            flowJson.accounts[options.name] = {
+                address: address,
+                key: privateKey,
+            };
+
+            saveFlowJson(flowJson);
+        }
+    });
+};
+
 const execCommand = function (cmd, callback) {
     exec(cmd, (err, stdout, stderr) => {
         let error;
@@ -54,9 +86,14 @@ const execCommand = function (cmd, callback) {
         }
 
         if (callback) {
-            callback();
+            callback(stdout);
         }
     });
 };
 
-module.exports = { execRead, execScript, execTransaction };
+module.exports = {
+    execRead,
+    execScript,
+    execTransaction,
+    execAccountsCreate,
+};

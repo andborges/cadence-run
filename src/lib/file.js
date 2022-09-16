@@ -45,6 +45,14 @@ const prepareFile = function (network, file, params) {
     return tempFile;
 };
 
+const getFlowJson = function () {
+    return JSON.parse(fs.readFileSync('./flow.json'));
+};
+
+const saveFlowJson = function (flowJson) {
+    fs.writeFileSync('./flow.json', JSON.stringify(flowJson, null, 2));
+};
+
 const cleanUp = function (file) {
     if (fs.existsSync(file)) {
         fs.unlinkSync(file);
@@ -55,4 +63,4 @@ const cleanUp = function (file) {
     }
 };
 
-module.exports = { prepareFile, cleanUp };
+module.exports = { prepareFile, getFlowJson, saveFlowJson, cleanUp };
