@@ -7,6 +7,10 @@
   },
   "author": "André Borges Medeiros",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andborges/flow-run.git"
+  },
   "dependencies": {
     "commander": "^9.4.0",
     "uuid": "^8.3.2"
