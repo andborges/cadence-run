@@ -4,7 +4,7 @@ A tool to simplify and extend flow-cli usage.
 
 ## Initial motivation
 
-When dealing with flow transactions and scripts, we use the flow-cli to make the execution on the environments.  
+When dealing with Flow Blockchain transactions and scripts, we use the flow-cli to make the execution on the environments.  
 For example:
 
 ```

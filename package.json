@@ -1,6 +1,6 @@
 {
   "name": "flow-run",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A tool to simplify and extend flow-cli usage",
   "bin": "src/index.js",
   "scripts": {
