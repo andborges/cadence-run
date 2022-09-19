@@ -47,15 +47,10 @@ const execTransaction = function (path, args, options) {
 };
 
 const execAccountsCreate = function (options) {
-    let privateKey = options.privateKey;
-    let publicKey = options.publicKey;
-
-    if (!privateKey || !publicKey) {
-        const ec = new EC('p256');
-        const keyPair = ec.genKeyPair();
-        privateKey = keyPair.getPrivate('hex');
-        publicKey = keyPair.getPublic('hex').substring(2);
-    }
+    const ec = new EC('p256');
+    const keyPair = ec.genKeyPair();
+    const privateKey = keyPair.getPrivate('hex');
+    const publicKey = keyPair.getPublic('hex').substring(2);
 
     let command = `flow accounts create --key ${publicKey}`;
 

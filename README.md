@@ -2,6 +2,12 @@
 
 A tool to simplify and extend flow-cli usage.
 
+[Initial motivation](#initial-motivation)  
+[Usage](#usage)  
+[How it works](#how-it-works)  
+[Extra stuff](#extra-stuff)  
+[Commands reference](#commands-reference)
+
 ## Initial motivation
 
 When dealing with Flow Blockchain transactions and scripts, we use the flow-cli to make the execution on the environments.  
