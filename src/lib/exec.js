@@ -5,19 +5,23 @@ const { prepareFile, getFlowJson, saveFlowJson, cleanUp } = require('./file');
 
 const execRead = function (contract, property, type, options) {
     const tempFile = prepareFile(options.network, path.join(__dirname, 'Read.cdc'), [contract, property, type]);
-    const command = `flow scripts execute ${tempFile} -l error`;
+    const command = `flow scripts execute ${tempFile}`;
 
-    execCommand(command, () => {
-        cleanUp(tempFile);
+    execCommand(command, options, () => {
+        if (!options.debug) {
+            cleanUp(tempFile);
+        }
     });
 };
 
 const execScript = function (path, args, options) {
     const tempFile = prepareFile(options.network, path);
-    const command = `flow scripts execute ${tempFile} ${args.reduce((c, a) => `${c} "${a}"`, '')} -l error`;
+    const command = `flow scripts execute ${tempFile} ${args.reduce((c, a) => `${c} "${a}"`, '')}`;
 
-    execCommand(command, () => {
-        cleanUp(tempFile);
+    execCommand(command, options, () => {
+        if (!options.debug) {
+            cleanUp(tempFile);
+        }
     });
 };
 
@@ -29,10 +33,10 @@ const execTransaction = function (path, args, options) {
         command += ` --signer ${options.signer}`;
     }
 
-    command += ' -l error';
-
-    execCommand(command, () => {
-        cleanUp(tempFile);
+    execCommand(command, options, () => {
+        if (!options.debug) {
+            cleanUp(tempFile);
+        }
     });
 };
 
@@ -48,9 +52,7 @@ const execAccountsCreate = function (options) {
         command += ` --signer ${options.signer}`;
     }
 
-    command += ' -l error';
-
-    execCommand(command, (stdout) => {
+    execCommand(command, options, (stdout) => {
         const matches = /^Address.*/gm.exec(stdout);
         if (matches[0]) {
             const address = matches[0].replace('Address', '').trim();
@@ -67,7 +69,9 @@ const execAccountsCreate = function (options) {
     });
 };
 
-const execCommand = function (cmd, callback) {
+const execCommand = function (cmd, options, callback) {
+    cmd += ` --network ${options.network} -l error`;
+
     exec(cmd, (err, stdout, stderr) => {
         let error;
 

@@ -54,12 +54,8 @@ const saveFlowJson = function (flowJson) {
 };
 
 const cleanUp = function (file) {
-    if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
-    }
-
     if (fs.existsSync(WORK_FOLDER)) {
-        fs.rmdirSync(WORK_FOLDER);
+        fs.rmSync(WORK_FOLDER, { recursive: true, force: true });
     }
 };
 

@@ -8,6 +8,7 @@ const program = new commander.Command();
 program.version('1.0.0', '-v, --version').usage('[command] [options]');
 
 program.option('-n, --network <value>', 'Network from configuration file (default "emulator")', 'emulator');
+program.option('-d, --debug', 'Execute the command in Debug mode');
 
 program.command('read <contract> <property> <type>').action((contract, property, type, options, cmd) => {
     execRead(contract, property, type, cmd.optsWithGlobals());
