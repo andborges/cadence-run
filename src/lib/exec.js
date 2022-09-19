@@ -7,7 +7,9 @@ const execRead = function (contract, property, type, options) {
     const tempFile = prepareFile(options.network, path.join(__dirname, 'Read.cdc'), [contract, property, type]);
     const command = `flow scripts execute ${tempFile}`;
 
-    execCommand(command, options, () => {
+    execCommand(command, options, (stdout) => {
+        console.log(stdout);
+
         if (!options.debug) {
             cleanUp(tempFile);
         }
@@ -18,7 +20,9 @@ const execScript = function (path, args, options) {
     const tempFile = prepareFile(options.network, path);
     const command = `flow scripts execute ${tempFile} ${args.reduce((c, a) => `${c} "${a}"`, '')}`;
 
-    execCommand(command, options, () => {
+    execCommand(command, options, (stdout) => {
+        console.log(stdout);
+
         if (!options.debug) {
             cleanUp(tempFile);
         }
@@ -33,7 +37,9 @@ const execTransaction = function (path, args, options) {
         command += ` --signer ${options.signer}`;
     }
 
-    execCommand(command, options, () => {
+    execCommand(command, options, (stdout) => {
+        console.log(stdout);
+
         if (!options.debug) {
             cleanUp(tempFile);
         }
@@ -41,10 +47,15 @@ const execTransaction = function (path, args, options) {
 };
 
 const execAccountsCreate = function (options) {
-    var ec = new EC('p256');
-    var keyPair = ec.genKeyPair();
-    var privateKey = keyPair.getPrivate('hex');
-    var publicKey = keyPair.getPublic('hex').substring(2);
+    let privateKey = options.privateKey;
+    let publicKey = options.publicKey;
+
+    if (!privateKey || !publicKey) {
+        const ec = new EC('p256');
+        const keyPair = ec.genKeyPair();
+        privateKey = keyPair.getPrivate('hex');
+        publicKey = keyPair.getPublic('hex').substring(2);
+    }
 
     let command = `flow accounts create --key ${publicKey}`;
 
@@ -54,6 +65,7 @@ const execAccountsCreate = function (options) {
 
     execCommand(command, options, (stdout) => {
         const matches = /^Address.*/gm.exec(stdout);
+
         if (matches[0]) {
             const address = matches[0].replace('Address', '').trim();
 
@@ -65,6 +77,9 @@ const execAccountsCreate = function (options) {
             };
 
             saveFlowJson(flowJson);
+            console.log(address);
+        } else {
+            console.log(stdout);
         }
     });
 };
@@ -85,8 +100,6 @@ const execCommand = function (cmd, options, callback) {
 
         if (error) {
             console.error(error);
-        } else {
-            console.log(stdout);
         }
 
         if (callback) {

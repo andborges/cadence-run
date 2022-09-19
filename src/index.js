@@ -14,12 +14,12 @@ program.command('read <contract> <property> <type>').action((contract, property,
     execRead(contract, property, type, cmd.optsWithGlobals());
 });
 
-const scriptsCmd = program.command('scripts');
+const scriptsCmd = new commander.Command('scripts');
 scriptsCmd.command('execute <path> [args...]').action((path, args, options, cmd) => {
     execScript(path, args, cmd.optsWithGlobals());
 });
 
-const transactionsCmd = program.command('transactions');
+const transactionsCmd = new commander.Command('transactions');
 transactionsCmd
     .command('send <path> [args...]')
     .option(
@@ -31,10 +31,12 @@ transactionsCmd
         execTransaction(path, args, cmd.optsWithGlobals());
     });
 
-const accountsCmd = program.command('accounts');
+const accountsCmd = new commander.Command('accounts');
 accountsCmd
     .command('create')
     .requiredOption('-n, --name <value>', 'Account name')
+    .option('-pr, --privateKey <value>', 'Private key to attach to account (Required if public key is sent)')
+    .option('-pu, --publicKey <value>', 'Public key to attach to account (Required if private key is sent)')
     .option(
         '-s, --signer <value>',
         'Account name from configuration used to sign the transaction (default "emulator-account")',
