@@ -46,7 +46,8 @@ The most common way is to install the tool globally using _npm_:
 npm install flow-run -g
 ```
 
-The tool basically keep the same structure of the flow-cli commands! (There's one exception, for the _"flow accounts create"_ command. [See below](#flow-accounts-create-command)).  
+The tool basically keep the same structure of the flow-cli commands! (There's one exception, for the _"flow accounts create"_ command. [See below](#flow-accounts-create-command)).
+
 So if you want to execute this transaction:
 
 ```
@@ -196,7 +197,7 @@ The command "read" allows access to the value of any public variable. For exampl
 flow-run read FlowToken totalSupply UFix64 --network testnet
 ```
 
-Will display the value of the variable "totalSupply" of the smart contract "FlowToken" deployed on the testnet.
+Will display the value of the variable "totalSupply" of the smart contract "FlowToken" deployed on the testnet, without the need of a script to be created.
 
 ## Commands reference
 
