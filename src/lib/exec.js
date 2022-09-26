@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 const path = require('path');
 const EC = require('elliptic').ec;
 const { prepareFile, getFlowJson, saveFlowJson, cleanUp } = require('./file');
@@ -82,25 +82,17 @@ const execAccountsCreate = function (options) {
 const execCommand = function (cmd, options, callback) {
     cmd += ` --network ${options.network} -l error`;
 
-    exec(cmd, (err, stdout, stderr) => {
-        let error;
-
-        if (err) {
-            error = err.message;
-        }
-
-        if (stderr) {
-            error = stderr;
-        }
-
-        if (error) {
-            console.error(error);
-        }
+    try {
+        const stdout = execSync(cmd).toString();
 
         if (callback) {
             callback(stdout);
         }
-    });
+    } catch (error) {
+        if (error) {
+            console.error(error);
+        }
+    }
 };
 
 module.exports = {
