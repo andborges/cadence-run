@@ -4,7 +4,13 @@ const EC = require('elliptic').ec;
 const { prepareFile, getFlowJson, saveFlowJson, cleanUp } = require('./file');
 
 const execRead = function (contract, property, type, options) {
-    const tempFile = prepareFile(options.network, path.join(__dirname, 'Read.cdc'), [contract, property, type]);
+    const placeholders = `{
+        Placeholder1: "${contract}",
+        Placeholder2: "${property}",
+        Placeholder3: "${type}"
+    }`;
+
+    const tempFile = prepareFile(options.network, path.join(__dirname, 'Read.cdc'), placeholders);
     const command = `flow scripts execute ${tempFile}`;
 
     execCommand(command, options, (stdout) => {
@@ -17,7 +23,7 @@ const execRead = function (contract, property, type, options) {
 };
 
 const execScript = function (path, args, options) {
-    const tempFile = prepareFile(options.network, path);
+    const tempFile = prepareFile(options.network, path, options.placeholders);
     const command = `flow scripts execute ${tempFile} ${args.reduce((c, a) => `${c} "${a}"`, '')}`;
 
     execCommand(command, options, (stdout) => {
@@ -30,7 +36,7 @@ const execScript = function (path, args, options) {
 };
 
 const execTransaction = function (path, args, options) {
-    const tempFile = prepareFile(options.network, path);
+    const tempFile = prepareFile(options.network, path, options.placeholders);
     let command = `flow transactions send ${tempFile}${args.reduce((c, a) => `${c} "${a}"`, '')}`;
 
     if (options.signer) {
@@ -68,7 +74,13 @@ const execAccountsCreate = function (options) {
 
             flowJson.accounts[options.name] = {
                 address: address,
-                key: privateKey,
+                key: {
+                    type: 'hex',
+                    index: 0,
+                    signatureAlgorithm: 'ECDSA_P256',
+                    hashAlgorithm: 'SHA3_256',
+                    privateKey: privateKey,
+                },
             };
 
             saveFlowJson(flowJson);

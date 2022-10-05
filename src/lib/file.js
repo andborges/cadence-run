@@ -10,14 +10,17 @@ const ensureWorkFolder = function () {
     }
 };
 
-const prepareFile = function (network, file, params) {
+const prepareFile = function (network, file, placeholders) {
     const flow = JSON.parse(fs.readFileSync('./flow.json'));
 
     let fileContent = fs.readFileSync(file).toString();
 
-    if (params) {
-        for (let i = 0; i < params.length; i++) {
-            fileContent = fileContent.replace(new RegExp('#' + (i + 1), 'g'), params[i]);
+    if (placeholders) {
+        const placeholdersObj = eval('(' + placeholders + ')');
+        const keys = Object.keys(placeholdersObj);
+
+        for (let i = 0; i < keys.length; i++) {
+            fileContent = fileContent.replace(new RegExp(keys[i], 'g'), placeholdersObj[keys[i]]);
         }
     }
 

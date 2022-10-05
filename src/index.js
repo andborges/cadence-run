@@ -8,6 +8,10 @@ const program = new commander.Command();
 program.version('1.0.0', '-v, --version').usage('[command] [options]');
 
 program.option('-n, --network <value>', 'Network from configuration file', 'emulator');
+program.option(
+    '-p, --placeholders <value>',
+    'Javascript object with placeholders to be used on scripts and transactions'
+);
 program.option('-d, --debug', 'Execute the command in Debug mode');
 
 program.command('read <contract> <property> <type>').action((contract, property, type, options, cmd) => {
